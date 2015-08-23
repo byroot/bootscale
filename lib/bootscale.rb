@@ -3,10 +3,12 @@ require_relative 'bootscale/version'
 module Bootscale
   DOT_SO = '.so'.freeze
   DOT_RB = '.rb'.freeze
+  LEADING_SLASH = '/'.freeze
 
   class << self
     def [](path)
       path = path.to_s
+      return if path.start_with?(LEADING_SLASH)
       if path.end_with?(DOT_RB) || path.end_with?(DOT_SO)
         cache[path]
       else
