@@ -13,7 +13,9 @@ module Bootscale
     end
 
     def dump(load_path, cache)
-      File.open(cache_path(load_path), 'wb+') { |f| f.write(MessagePack.dump(cache)) }
+      path = cache_path(load_path)
+      return if File.exist?(path)
+      File.open(path, 'wb+') { |f| f.write(MessagePack.dump(cache)) }
     end
 
     def cache_path(load_path)
