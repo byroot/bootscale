@@ -1,32 +1,31 @@
 # Bootscale
 
-Speedup applications boot by caching require calls
+Speedup applications boot by caching require calls.
+
+Speed gain depends on your number of gems. Under 100 gems you likely won't see the difference,
+but for bigger applications (300+ gems) it can make the application boot up to 30% faster.
+
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
 ```ruby
+# Gemfile
 gem 'bootscale', require: false
 ```
-
-And then execute:
-
-    $ bundle
 
 Then you need to add right after `require 'bundler/setup'`:
 
 ```ruby
 require 'bundler/setup'
 require 'bootscale'
-Bootscale.setup(cache_directory: '/path/to/cache/directory')
+Bootscale.setup(cache_directory: 'tmp/bootscale')
 ```
 
 If your application is a Rails application, you will find this in `config/boot.rb`.
 
 ### Important
 
-You must regenerate the cache everytime `$LOAD_PATH` is modified by calling `Bootscale.regenerate`.
+Cache should be update everytime `$LOAD_PATH` is modified by calling `Bootscale.regenerate`.
 
 For Rails apps it means adding an initializer in `config/application.rb`:
 
@@ -39,15 +38,6 @@ module MyApp
   end
 end
 ```
-
-## Usage
-
-Just install it that's all!
-
-## How much faster is it?
-
-It totally depends on your number of gems. Under 100 gems you likely won't see the difference,
-but for bigger applications (300+ gems) it can make the application boot up to 30% faster.
 
 ## Contributing
 

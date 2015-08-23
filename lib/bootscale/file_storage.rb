@@ -15,6 +15,7 @@ module Bootscale
     def dump(load_path, cache)
       path = cache_path(load_path)
       return if File.exist?(path)
+      FileUtils.mkdir_p(File.dirname(path))
       File.open(path, 'wb+') { |f| f.write(MessagePack.dump(cache)) }
     end
 
