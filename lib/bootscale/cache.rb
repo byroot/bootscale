@@ -18,7 +18,7 @@ module Bootscale
     end
 
     def regenerate
-      ordered_entries = $LOAD_PATH.map { |path| entries.fetch(path) { Entry.new(path) } }
+      ordered_entries = $LOAD_PATH.map { |path| entries.fetch(path) { entries[path] = Entry.new(path) } }
       @cache = Hash[ordered_entries.reverse.flat_map(&:features)]
     end
   end
