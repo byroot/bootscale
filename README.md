@@ -46,3 +46,4 @@ but for bigger applications (300+ gems) it can make the application boot up to 3
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/byroot/bootscale.
 
+Thanks to Aaron Patterson for the idea of converting relative paths to absolute paths.
