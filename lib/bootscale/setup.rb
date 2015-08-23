@@ -1,6 +1,6 @@
 module Kernel
   def require_with_cache(path)
-    require_without_cache(Bootscale[path])
+    require_without_cache(Bootscale[path] || path)
   end
 
   alias_method :require_without_cache, :require
@@ -9,7 +9,7 @@ end
 
 class << Kernel
   def require_with_cache(path)
-    require_without_cache(Bootscale[path])
+    require_without_cache(Bootscale[path] || path)
   end
 
   alias_method :require_without_cache, :require
@@ -18,7 +18,7 @@ end
 
 class Module
   def autoload_with_cache(const, path)
-    autoload_without_cache(const, Bootscale[path])
+    autoload_without_cache(const, Bootscale[path] || path)
   end
 
   alias_method :autoload_without_cache, :autoload

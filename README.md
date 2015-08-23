@@ -14,7 +14,14 @@ And then execute:
 
     $ bundle
 
-Then you need to add `require 'bootscale'` right after `require 'bundler/setup'`.
+Then you need to add right after `require 'bundler/setup'`:
+
+```ruby
+require 'bundler/setup'
+require 'bootscale'
+Bootscale.setup(cache_directory: '/path/to/cache/directory')
+```
+
 If your application is a Rails application, you will find this in `config/boot.rb`.
 
 ### Important
