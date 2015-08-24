@@ -18,7 +18,7 @@ module Bootscale
 
     def setup(options = {})
       self.cache_directory = options[:cache_directory]
-      require_relative 'bootscale/setup'
+      require_relative 'bootscale/core_ext'
       regenerate
     end
 
