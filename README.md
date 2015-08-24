@@ -43,4 +43,6 @@ end
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/byroot/bootscale.
 
+Local development: your load time will be very slow when using a local copy for development like `gem 'bootscale', path: '~/Code/bootscal'`, use via git instead.
+
 Thanks to Aaron Patterson for the idea of converting relative paths to absolute paths.
