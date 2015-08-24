@@ -1,4 +1,4 @@
-require_relative 'lib/bootscale/version'
+require File.expand_path('../lib/bootscale/version', __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name          = 'bootscale'
