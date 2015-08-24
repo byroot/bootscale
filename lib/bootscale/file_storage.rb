@@ -15,7 +15,7 @@ module Bootscale
       path = cache_path(load_path)
       return if File.exist?(path)
       FileUtils.mkdir_p(File.dirname(path))
-      File.write(path, Serializer.dump(cache))
+      File.write(path, Serializer.dump(cache), mode: 'wb+')
     end
 
     if defined?(MessagePack)
