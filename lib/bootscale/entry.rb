@@ -3,7 +3,7 @@ module Bootscale
     DL_EXTENSIONS = [
       RbConfig::CONFIG['DLEXT'],
       RbConfig::CONFIG['DLEXT2'],
-    ].reject(&:empty?).map { |ext| ".#{ext}"}
+    ].reject { |ext| ext.nil? || ext.empty? }.map { |ext| ".#{ext}"}
     FEATURE_FILES = "**/*{#{DOT_RB},#{DL_EXTENSIONS.join(',')}}"
     NORMALIZE_NATIVE_EXTENSIONS = !DL_EXTENSIONS.include?(DOT_SO)
     ALTERNATIVE_NATIVE_EXTENSIONS_PATTERN = /\.(o|bundle|dylib)\z/
