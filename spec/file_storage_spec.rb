@@ -2,7 +2,9 @@ require 'spec_helper'
 require 'bootscale/file_storage'
 
 RSpec.describe Bootscale::FileStorage do
-  subject { Bootscale::FileStorage.new('/tmp/bootscale') }
+  around { |test| in_tmpdir(&test) }
+
+  subject { Bootscale::FileStorage.new('tmp/bootscale') }
 
   it "dumps via Marshal by default" do
     expect(Bootscale::FileStorage::Serializer).to eq Marshal

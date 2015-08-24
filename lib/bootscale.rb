@@ -26,6 +26,8 @@ module Bootscale
       @cache = load_cache || save_cache(cache_builder.generate($LOAD_PATH))
     end
 
+    private
+
     def cache
       @cache ||= {}
     end
