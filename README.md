@@ -3,7 +3,7 @@
 Speedup applications boot by caching require calls.
 
 Speed gain depends on your number of gems. Under 100 gems you likely won't see the difference,
-but for bigger applications it can save 1 to 2 seconds of boot time per 100 gems in the Gemfile.
+but for bigger applications it can save 1 to 3 seconds of boot time per 100 used gems.
 
 ## Installation
 
@@ -39,7 +39,7 @@ end
 
 ## Faster cache loading
 
-Add the `msgpack` gem and `require 'msgpack'` to gain ~10-30ms of extra load speed by using msgpack. 
+Add the `msgpack` gem and `require 'msgpack'` to gain ~10-30ms of extra load speed by using msgpack.
 
 ## Contributing
 
