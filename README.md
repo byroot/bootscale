@@ -3,8 +3,7 @@
 Speedup applications boot by caching require calls.
 
 Speed gain depends on your number of gems. Under 100 gems you likely won't see the difference,
-but for bigger applications (300+ gems) it can make the application boot up to 30% faster.
-
+but for bigger applications it can save 1 to 2 seconds of boot time per 100 gems in the Gemfile.
 
 ## Installation
 
