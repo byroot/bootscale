@@ -1,0 +1,10 @@
+language: ruby
+sudo: false
+rvm:
+  - '1.9'
+  - '2.0'
+  - '2.1'
+  - '2.2'
+  - rbx-2
+before_install: gem install bundler -v 1.10.6
+
