@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'bootscale'
 require 'pathname'
+require 'tmpdir'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

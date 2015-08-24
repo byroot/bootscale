@@ -38,6 +38,10 @@ module MyApp
 end
 ```
 
+## Faster cache loading
+
+Add the `msgpack` gem and `require 'msgpack'` to gain ~10-30ms of extra load speed by using msgpack. 
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/byroot/bootscale.

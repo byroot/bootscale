@@ -13,5 +13,4 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z lib README.md LICENSE.txt`.split("\x0")
 
   spec.required_ruby_version = '>= 1.9.3'
-  spec.add_runtime_dependency 'msgpack', '~> 0.6.2'
 end

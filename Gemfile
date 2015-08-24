@@ -5,6 +5,7 @@ gemspec
 gem 'bundler'
 gem 'rake'
 gem 'rspec'
+gem 'msgpack'
 
 group :dummy do
   gem 'rails', '4.2.3'
