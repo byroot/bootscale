@@ -14,6 +14,7 @@ module Bootscale
     end
 
     def requireables
+      return [] unless @path.start_with?(SLASH)
       path_prefix = (@path.end_with?(SLASH) ? @path.size : @path.size + 1)
       relative_part = path_prefix..-1
       Dir[File.join(@path, REQUIREABLE_FILES)].map do |absolute_path|
