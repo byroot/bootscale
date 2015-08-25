@@ -4,15 +4,15 @@ module Bootscale
       @entries = {}
     end
 
-    # this fills in missing entries, it is not a complete regeneration, so for example removing a load-path would not remove the paths
-    # same for changing load-path order or modifying something inside of a load-path
-    # TODO rename or fix
+    # generate the requireables cache from all current load-path entries
+    # each load-path is cached individually, so new ones can be added or removed
+    # but added/removed files will not be discovered
     def generate(load_path)
-      ordered_features = load_path.reverse_each.flat_map do |path|
+      requireables = load_path.reverse_each.flat_map do |path|
         path = path.to_s
-        entries[path] ||= Entry.new(path).features
+        entries[path] ||= Entry.new(path).requireables
       end
-      Hash[ordered_features]
+      Hash[requireables]
     end
 
     private
