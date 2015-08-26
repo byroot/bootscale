@@ -1,6 +1,6 @@
 # Bootscale
 
-Speedup applications boot by caching require calls.
+Speedup applications boot by caching file locations during require calls.
 
 Speed gain depends on your number of gems. Under 100 gems you likely won't see the difference,
 but for bigger applications it can save 1 to 3 seconds of boot time per 100 used gems.
@@ -40,6 +40,13 @@ end
 ## Faster cache loading
 
 Add the `msgpack` gem and `require 'msgpack'` to gain ~10-30ms of extra load speed by using msgpack.
+
+## Under the hood
+
+Bootscale caches the absolute location of all requirable files on the $LOAD_PATH and
+patches `require` + `autoload` to use these absolute paths, thereby avoiding having to check all load paths for every require.
+
+Problem outlined in this [talk](https://www.youtube.com/watch?v=kwkbrOwLsZY)
 
 ## Contributing
 
