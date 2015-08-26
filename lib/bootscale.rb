@@ -9,11 +9,12 @@ module Bootscale
     def [](path)
       path = path.to_s
       return if path.start_with?(LEADING_SLASH)
-      if path.end_with?(DOT_RB, DOT_SO)
+      result = if path.end_with?(DOT_RB, DOT_SO)
         @cache[path]
       else
         @cache["#{path}#{DOT_RB}"] || @cache["#{path}#{DOT_SO}"]
       end
+      result unless result == :relative
     end
 
     def setup(options = {})
