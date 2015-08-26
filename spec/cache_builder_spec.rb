@@ -11,8 +11,9 @@ RSpec.describe Bootscale::CacheBuilder do
     expect(cache.keys.sort).to eq %w(application_controller.rb)
   end
 
-  it "ignores relative paths since they do not work normally or when switching directories" do
+  it "marks relative paths since they do not work normally or when switching directories" do
+    expect_any_instance_of(Bootscale::Entry).to receive(:warn)
     cache = subject.generate(['spec/dummy/app/controllers'])
-    expect(cache.keys).to eq []
+    expect(cache).to eq "application_controller.rb" => :relative
   end
 end

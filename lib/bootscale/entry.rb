@@ -14,7 +14,10 @@ module Bootscale
     end
 
     def requireables
-      return [] unless @path.start_with?(SLASH)
+      unless absolute = @path.start_with?(SLASH)
+        warn "Bootscale: Cannot speedup load for relative path #{@path}"
+      end
+
       path_prefix = (@path.end_with?(SLASH) ? @path.size : @path.size + 1)
       relative_part = path_prefix..-1
       Dir[File.join(@path, REQUIREABLE_FILES)].map do |absolute_path|
@@ -24,7 +27,7 @@ module Bootscale
           relative_path.sub!(ALTERNATIVE_NATIVE_EXTENSIONS_PATTERN, DOT_SO)
         end
 
-        [relative_path, absolute_path]
+        [relative_path, (absolute ? absolute_path : :relative)]
       end
     end
   end
