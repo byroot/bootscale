@@ -1,41 +1,65 @@
 require 'spec_helper'
 
 RSpec.describe Bootscale do
-  def sh(command)
-    result = `#{command}`
-    raise "FAILED #{result}" unless $?.success?
-    result
-  end
-
-  def ordering(folders)
-    in_tmpdir do
-      folders.each do |folder|
-        FileUtils.mkdir(folder)
-        File.write("#{folder}/first.rb", "puts '#{folder}'")
-      end
-
-      sh("ruby #{Bundler.root}/spec/cases/order.rb 2>/dev/null")
-    end
-  end
-
   it "doesn't break application boot" do
-    Dir.chdir(File.expand_path('../dummy', __FILE__)) do
-      sh("bundle exec rails r '1 + 1'")
-    end
+    expect {
+      Dir.chdir(File.expand_path('../dummy', __FILE__)) do
+        system("bundle exec rails r 'p 1 + 1'")
+      end
+    }.to output("2\n").to_stdout_from_any_process
   end
 
   it "can dump via msgpack" do
-    in_tmpdir do
-      sh("ruby #{Bundler.root}/spec/cases/message_pack.rb")
-    end
+    expect {
+      <<-RUBY
+        # test.rb
+        require 'msgpack'
+        require 'bootscale/setup'
+
+        puts MessagePack.load(File.read(Dir['tmp/bootscale/*'].first)).class
+      RUBY
+    }.to echo "Hash\n"
   end
 
   it "requires in correct order" do
-    expect(ordering(["three"])).to eq "three\n"
-    expect(ordering(["one", "three"])).to eq "one\n"
+    expect {
+      <<-RUBY
+        # one/load.rb
+        $test << 1
+
+        # two/load.rb
+        $test << 2
+
+        # test.rb
+        $LOAD_PATH << File.expand_path('two')
+        $LOAD_PATH << File.expand_path('one')
+        $test = []
+        require 'bootscale/setup'
+        require 'load'
+
+        puts $test.inspect
+      RUBY
+    }.to echo "[2]\n"
   end
 
   it "requires in relative paths even when overwritten" do
-    expect(ordering(["two", "three"])).to eq "two\n"
+    expect {
+      <<-RUBY
+        # one/load.rb
+        $test << 1
+
+        # two/load.rb
+        $test << 2
+
+        # test.rb
+        $LOAD_PATH << 'two'
+        $LOAD_PATH << File.expand_path('one')
+        $test = []
+        require 'bootscale/setup'
+        require 'load'
+
+        puts $test.inspect
+      RUBY
+    }.to echo "Bootscale: Cannot speedup load for relative path two\n[2]\n"
   end
 end
