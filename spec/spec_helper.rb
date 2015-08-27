@@ -3,11 +3,7 @@ require 'bootscale'
 require 'pathname'
 require 'tmpdir'
 
-module TestHelpers
-  def in_tmpdir(&block)
-    Dir.mktmpdir('bootscale') { |dir| Dir.chdir(dir, &block) }
-  end
-end
+Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -25,6 +21,5 @@ RSpec.configure do |config|
   config.warnings = true
 
   config.order = :random
-  config.include TestHelpers
   Kernel.srand config.seed
 end
