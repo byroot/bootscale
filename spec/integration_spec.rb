@@ -62,4 +62,38 @@ RSpec.describe Bootscale do
       RUBY
     }.to echo "Bootscale: Cannot speedup load for relative path two\n[2]\n"
   end
+
+  it "does not cache vendor/bundle in the load path since that duplicates all known files" do
+    expect {
+      <<-RUBY
+        # vendor/bundle/gems/active_support-2.1.3/foo/bar.rb
+        $test << 1
+
+        # vendor/foo.rb
+        $test << 2
+
+        # lib/bundle/baz.rb
+        $test << 3
+
+        # rails.rb
+        $LOAD_PATH << File.expand_path('vendor') # rails does that by default
+        $LOAD_PATH << File.expand_path('lib') # making sure not everything with /bundle/ is ignored
+        $LOAD_PATH << File.expand_path('vendor/bundle/gems/active_support-2.1.3')
+        $test = []
+
+        require 'bootscale/setup'
+
+        puts "not cached: \#{!!Bootscale['bundle/gems/active_support-2.1.3/foo/bar']}"
+        puts "cached 1: \#{!!Bootscale['foo/bar']}"
+        puts "cached 2: \#{!!Bootscale['bundle/baz']}"
+
+        require 'foo/bar' # normal require from real load path
+        require 'foo' # normal require from vendor load path
+        require 'bundle/baz' # normal require from bundle load path
+        require 'bundle/gems/active_support-2.1.3/foo/bar' # nested require still works since we fall back
+
+        puts $test.inspect
+      RUBY
+    }.to echo "not cached: false\ncached 1: true\ncached 2: true\n[1, 2, 3]\n"
+  end
 end
