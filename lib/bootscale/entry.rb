@@ -10,24 +10,25 @@ module Bootscale
     SLASH = '/'.freeze
 
     def initialize(path)
-      @path = path
+      @path = path.sub(/\/$/, '')
     end
 
     def requireables
       unless absolute = @path.start_with?(SLASH)
         warn "Bootscale: Cannot speedup load for relative path #{@path}"
       end
+      includes_vendor_bundle = @path.end_with?("vendor") && File.exist?("#{@path}/bundle")
 
-      path_prefix = (@path.end_with?(SLASH) ? @path.size : @path.size + 1)
-      relative_part = path_prefix..-1
-      Dir[File.join(@path, REQUIREABLE_FILES)].map do |absolute_path|
+      relative_part = (@path.size + 1)..-1
+      Dir[File.join(@path, REQUIREABLE_FILES)].each_with_object([]) do |absolute_path, all|
         relative_path = absolute_path.slice(relative_part)
+        next if includes_vendor_bundle && relative_path.start_with?("bundle/")
 
         if NORMALIZE_NATIVE_EXTENSIONS
           relative_path.sub!(ALTERNATIVE_NATIVE_EXTENSIONS_PATTERN, DOT_SO)
         end
 
-        [relative_path, (absolute ? absolute_path : :relative)]
+        all << [relative_path, (absolute ? absolute_path : :relative)]
       end
     end
   end
