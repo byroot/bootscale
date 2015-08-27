@@ -76,10 +76,17 @@ RSpec.describe Bootscale do
         $test << 3
 
         # rails.rb
+        require 'pathname'
         $LOAD_PATH << File.expand_path('vendor') # rails does that by default
         $LOAD_PATH << File.expand_path('lib') # making sure not everything with /bundle/ is ignored
         $LOAD_PATH << File.expand_path('vendor/bundle/gems/active_support-2.1.3')
         $test = []
+
+        module Bundler
+          def self.bundle_path
+            Pathname.new(File.expand_path('vendor/bundle/gems/'))
+          end
+        end
 
         require 'bootscale/setup'
 
