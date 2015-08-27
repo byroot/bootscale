@@ -4,6 +4,7 @@ class ScriptOutput < RSpec::Matchers::BuiltIn::Output
     return false unless Proc === block
     @source = block.call
     @actual = @stream_capturer.capture lambda { run_example(@source) }
+    raise "Script exited with status: #{$?.exitstatus}, output:\n#{@actual}" unless $?.success?
     @expected ? values_match?(@expected, @actual) : captured?
   end
 
@@ -31,10 +32,7 @@ class ScriptOutput < RSpec::Matchers::BuiltIn::Output
         FileUtils.mkdir_p(File.dirname(file))
         File.write(file, code)
       end
-
-      unless system("ruby #{files.last.first} 2>&1")
-        raise "Script exited with status: #{$?.exitstatus}"
-      end
+      system("ruby #{files.last.first} 2>&1")
     end
   end
 end
