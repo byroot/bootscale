@@ -30,7 +30,7 @@ For Rails apps it means adding an initializer in `config/application.rb`:
 ```ruby
 module MyApp
   class Application < Rails::Application
-    initializer :regenerate_require_cache, after: :set_load_path do
+    initializer :regenerate_require_cache, before: :load_environment_config do
       Bootscale.regenerate
     end
   end
