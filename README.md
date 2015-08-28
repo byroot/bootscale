@@ -25,8 +25,7 @@ If your application is a Rails application, you will find this in `config/boot.r
 
 For correctness cache should be updated everytime `$LOAD_PATH` is modified by calling `Bootscale.regenerate`.
 
-For Rails apps it means adding an initializer in `config/application.rb`,
-check `time rails runner 1` to see if it improves your boot time.
+For Rails apps it means adding an initializer in `config/application.rb`.
 
 ```ruby
 module MyApp
