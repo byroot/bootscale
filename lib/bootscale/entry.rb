@@ -27,7 +27,7 @@ module Bootscale
           relative_path.sub!(ALTERNATIVE_NATIVE_EXTENSIONS_PATTERN, DOT_SO)
         end
 
-        all << [relative_path, (@absolute ? absolute_path : :relative)]
+        all << [relative_path, @absolute && absolute_path]
       end
     end
   end
