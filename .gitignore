@@ -10,4 +10,4 @@
 *.so
 *.bundle
 *.dylib
-
+*.gem

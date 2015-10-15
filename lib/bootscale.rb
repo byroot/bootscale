@@ -1,3 +1,4 @@
+require 'pathname'
 require_relative 'bootscale/version'
 
 module Bootscale
@@ -61,4 +62,8 @@ require_relative 'bootscale/entry'
 require_relative 'bootscale/features'
 require_relative 'bootscale/cache_builder'
 
-require_relative 'bootscale/_bootscale'
+begin
+  require_relative 'bootscale/_bootscale'
+rescue LoadError
+  puts "No C-ext WTF"
+end

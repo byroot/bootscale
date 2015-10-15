@@ -1,6 +1,6 @@
 module Bootscale
   module Features
-    CACHE_FILE_NAME = 'features.paths'
+    CACHE_FILE_NAME = 'bootscale.paths'
 
     extend self
 
