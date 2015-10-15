@@ -11,6 +11,9 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/byroot/bootscale"
 
   spec.files         = `git ls-files -z lib README.md LICENSE.txt`.split("\x0")
+  spec.extensions = %w(ext/bootscale/extconf.rb)
+
+  spec.add_development_dependency 'rake-compiler', '~> 0.9'
 
   spec.required_ruby_version = '>= 1.9.3'
 end

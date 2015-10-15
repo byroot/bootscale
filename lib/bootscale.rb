@@ -58,3 +58,5 @@ end
 
 require_relative 'bootscale/entry'
 require_relative 'bootscale/cache_builder'
+
+require_relative 'bootscale/_bootscale'
