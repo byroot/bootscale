@@ -8,14 +8,17 @@ module Bootscale
     NORMALIZE_NATIVE_EXTENSIONS = !DL_EXTENSIONS.include?(DOT_SO)
     ALTERNATIVE_NATIVE_EXTENSIONS_PATTERN = /\.(o|bundle|dylib)\z/
     SLASH = '/'.freeze
-    BUNDLE_PATH = Bundler.bundle_path.cleanpath.to_s << SLASH
+
+    if defined?(Bundler)
+      BUNDLE_PATH = Bundler.bundle_path.cleanpath.to_s << SLASH
+    end
 
     def initialize(path)
       @path = Pathname.new(path).cleanpath
       @absolute = @path.absolute?
       warn "Bootscale: Cannot speedup load for relative path #{@path}" unless @absolute
       @relative_slice = (@path.to_s.size + 1)..-1
-      @contains_bundle_path = BUNDLE_PATH.start_with?(@path.to_s)
+      @contains_bundle_path = defined?(BUNDLE_PATH) && BUNDLE_PATH.start_with?(@path.to_s)
     end
 
     def requireables

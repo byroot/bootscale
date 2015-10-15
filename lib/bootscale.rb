@@ -1,6 +1,8 @@
+require 'pathname'
 require_relative 'bootscale/version'
 
 module Bootscale
+
   DOT_SO = '.so'.freeze
   DOT_RB = '.rb'.freeze
   LEADING_SLASH = '/'.freeze
@@ -57,4 +59,6 @@ module Bootscale
 end
 
 require_relative 'bootscale/entry'
+require_relative 'bootscale/features'
 require_relative 'bootscale/cache_builder'
+require_relative 'bootscale/_bootscale'
