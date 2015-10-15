@@ -61,9 +61,4 @@ end
 require_relative 'bootscale/entry'
 require_relative 'bootscale/features'
 require_relative 'bootscale/cache_builder'
-
-begin
-  require_relative 'bootscale/_bootscale'
-rescue LoadError
-  puts "No C-ext WTF"
-end
+require_relative 'bootscale/_bootscale'
