@@ -39,7 +39,20 @@ end
 
 ## Faster cache loading
 
-Add the `msgpack` gem and `require 'msgpack'` to gain ~10-30ms of extra load speed by using msgpack.
+In order to gain ~10-30ms of extra load speed, you can use the msgpack gem:
+
+```ruby
+# Gemfile
+gem 'msgpack',   require: false
+gem 'bootscale', require: false
+```
+
+```ruby
+# config/application.rb (or wherever you have the require of bundler/setup)
+require 'bundler/setup'
+require 'msgpack'
+require 'bootscale/setup'
+```
 
 ## Under the hood
 
