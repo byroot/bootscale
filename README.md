@@ -64,6 +64,10 @@ patches `require` + `autoload` to use these absolute paths, thereby avoiding hav
 
 Problem outlined in this [talk](https://www.youtube.com/watch?v=kwkbrOwLsZY)
 
+## Troubleshooting
+
+If you're experiencing problems with loading your application and are unable to successfully run `Bootscale.regenerate`, try deleting the `tmp/bootscale` folder.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/byroot/bootscale.
