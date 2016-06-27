@@ -1,4 +1,5 @@
 require 'digest/md5'
+require_relative 'utils'
 
 module Bootscale
   class FileStorage
@@ -14,7 +15,7 @@ module Bootscale
     def dump(load_path, cache)
       path = cache_path(load_path)
       FileUtils.mkdir_p(File.dirname(path))
-      File.write(path, Serializer.dump(cache), mode: 'wb+')
+      Utils.atomic_write(path) { |f| f.write(Serializer.dump(cache)) }
     end
 
     private
