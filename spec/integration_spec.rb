@@ -90,9 +90,9 @@ RSpec.describe Bootscale do
 
         require 'bootscale/setup'
 
-        puts "not cached: \#{!!Bootscale['bundle/gems/active_support-2.1.3/foo/bar']}"
-        puts "cached 1: \#{!!Bootscale['foo/bar']}"
-        puts "cached 2: \#{!!Bootscale['bundle/baz']}"
+        puts "not cached: \#{!!Bootscale.cache['bundle/gems/active_support-2.1.3/foo/bar']}"
+        puts "cached 1: \#{!!Bootscale.cache['foo/bar']}"
+        puts "cached 2: \#{!!Bootscale.cache['bundle/baz']}"
 
         require 'foo/bar' # normal require from real load path
         require 'foo' # normal require from vendor load path
