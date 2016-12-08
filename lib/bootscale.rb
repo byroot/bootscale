@@ -12,14 +12,14 @@ module Bootscale
       @cache_builder ||= CacheBuilder.new
     end
 
-    def setup(options = {})
-      @cache_directory = options[:cache_directory]
-      regenerate
-      require_relative 'bootscale/core_ext'
+    def regenerate
+      cache.reload
     end
 
-    def regenerate(load_path = $LOAD_PATH)
-      @cache = Cache.new(load_path, cache_directory)
+    def setup(options = {})
+      @cache_directory = options[:cache_directory]
+      @cache = Cache.new(cache_directory)
+      require_relative 'bootscale/core_ext'
     end
   end
 end

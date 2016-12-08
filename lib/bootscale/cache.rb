@@ -2,17 +2,23 @@ require_relative 'file_storage'
 
 module Bootscale
   class Cache
-    attr_reader :load_path
-
-    def initialize(load_path, cache_directory = nil)
-      @load_path = load_path
+    def initialize(cache_directory = nil)
       @storage = FileStorage.new(cache_directory) if cache_directory
-      @cache = load || save(Bootscale.cache_builder.generate(load_path))
+      reload
+    end
+
+    def load_path
+      $LOAD_PATH
+    end
+
+    def reload(force = true)
+      @cache = fetch(load_path) if force
     end
 
     def [](path)
       path = path.to_s
       return if path.start_with?(LEADING_SLASH)
+      reload(false)
       if path.end_with?(DOT_RB, DOT_SO)
         @cache[path]
       else
@@ -23,6 +29,10 @@ module Bootscale
     private
 
     attr_reader :storage
+
+    def fetch(load_path)
+      load || save(Bootscale.cache_builder.generate(load_path))
+    end
 
     def load
       return unless storage
