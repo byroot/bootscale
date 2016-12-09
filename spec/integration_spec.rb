@@ -4,9 +4,17 @@ RSpec.describe Bootscale do
   it "doesn't break application boot" do
     expect {
       Dir.chdir(File.expand_path('../dummy', __FILE__)) do
-        system("bundle exec rails r 'p 1 + 1'")
+        system('bundle', 'exec', 'rails', 'r', 'p 1 + 1')
       end
-    }.to output("2\n").to_stdout_from_any_process
+    }.to output(%{2\n}).to_stdout_from_any_process
+  end
+
+  it "doesn't break auto loading of models" do
+    expect {
+      Dir.chdir(File.expand_path('../dummy', __FILE__)) do
+        system("bundle exec rails r 'p Comment.name'")
+      end
+    }.to output(%{"Comment"\n}).to_stdout_from_any_process
   end
 
   it "can dump via msgpack" do
@@ -90,9 +98,9 @@ RSpec.describe Bootscale do
 
         require 'bootscale/setup'
 
-        puts "not cached: \#{!!Bootscale['bundle/gems/active_support-2.1.3/foo/bar']}"
-        puts "cached 1: \#{!!Bootscale['foo/bar']}"
-        puts "cached 2: \#{!!Bootscale['bundle/baz']}"
+        puts "not cached: \#{!!Bootscale.cache['bundle/gems/active_support-2.1.3/foo/bar']}"
+        puts "cached 1: \#{!!Bootscale.cache['foo/bar']}"
+        puts "cached 2: \#{!!Bootscale.cache['bundle/baz']}"
 
         require 'foo/bar' # normal require from real load path
         require 'foo' # normal require from vendor load path

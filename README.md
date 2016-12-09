@@ -14,16 +14,6 @@ but for bigger applications it can save 1 to 3 seconds of boot time per 100 used
 # Gemfile
 gem 'bootscale', require: false
 ```
-
-Then you need to add right after `require 'bundler/setup'`:
-
-```ruby
-require 'bundler/setup'
-require 'bootscale/setup'
-```
-
-If your application is a Rails application, you will find this in `config/boot.rb`.
-
 ### Important
 
 For correctness cache should be updated everytime `$LOAD_PATH` is modified by calling `Bootscale.regenerate`.
@@ -38,6 +28,22 @@ module MyApp
     end
   end
 end
+
+### Rails applications
+
+Locate `require 'bundler/setup'` in `config/boot.rb` and add `require 'bootscale/rails'` after it:
+```ruby
+require 'bundler/setup'
+require 'bootscale/rails'
+```
+
+### Other Bundler enabled applications
+
+Locate `require 'bundler/setup'`, and add `require 'bootscale/setup'` after it:
+
+```ruby
+require 'bundler/setup'
+require 'bootscale/setup'
 ```
 
 ## Faster cache loading
@@ -51,10 +57,10 @@ gem 'bootscale', require: false
 ```
 
 ```ruby
-# config/application.rb (or wherever you have the require of bundler/setup)
+# config/boot.rb (or wherever you have the require of bundler/setup)
 require 'bundler/setup'
 require 'msgpack'
-require 'bootscale/setup'
+require 'bootscale/setup' # or require 'bootscale/rails'
 ```
 
 ## Under the hood
@@ -66,7 +72,7 @@ Problem outlined in this [talk](https://www.youtube.com/watch?v=kwkbrOwLsZY)
 
 ## Troubleshooting
 
-If you're experiencing problems with loading your application and are unable to successfully run `Bootscale.regenerate`, try deleting the `tmp/bootscale` folder.
+If you're experiencing problems with loading your application, especially after moving files around, try deleting the `tmp/bootscale` folder.
 
 ## Contributing
 

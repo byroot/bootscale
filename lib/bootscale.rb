@@ -6,55 +6,24 @@ module Bootscale
   LEADING_SLASH = '/'.freeze
 
   class << self
-    def [](path)
-      path = path.to_s
-      return if path.start_with?(LEADING_SLASH)
-      if path.end_with?(DOT_RB, DOT_SO)
-        @cache[path]
-      else
-        @cache["#{path}#{DOT_RB}"] || @cache["#{path}#{DOT_SO}"]
-      end
-    end
-
-    def setup(options = {})
-      self.cache_directory = options[:cache_directory]
-      require_relative 'bootscale/core_ext'
-      regenerate
-    end
-
-    def regenerate
-      @cache = load_cache || save_cache(cache_builder.generate($LOAD_PATH))
-    end
-
-    private
+    attr_reader :cache, :cache_directory
 
     def cache_builder
       @cache_builder ||= CacheBuilder.new
     end
 
-    def load_cache
-      return unless storage
-      storage.load($LOAD_PATH)
+    def regenerate
+      cache.reload
     end
 
-    def save_cache(cache)
-      return cache unless storage
-      storage.dump($LOAD_PATH, cache)
-      cache
-    end
-
-    attr_accessor :storage
-
-    def cache_directory=(directory)
-      if directory
-        require_relative 'bootscale/file_storage'
-        self.storage = FileStorage.new(directory)
-      else
-        self.storage = nil
-      end
+    def setup(options = {})
+      @cache_directory = options[:cache_directory]
+      @cache = Cache.new(cache_directory)
+      require_relative 'bootscale/core_ext'
     end
   end
 end
 
 require_relative 'bootscale/entry'
 require_relative 'bootscale/cache_builder'
+require_relative 'bootscale/cache'
