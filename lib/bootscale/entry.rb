@@ -13,7 +13,14 @@ module Bootscale
     def initialize(path)
       @path = Pathname.new(path).cleanpath
       @absolute = @path.absolute?
-      warn "Bootscale: Cannot speedup load for relative path #{@path}" unless @absolute
+      if @absolute
+        begin
+          @path = @path.realpath
+        rescue Errno::ENOENT
+        end
+      else
+        warn "Bootscale: Cannot speedup load for relative path #{@path}"
+      end
       @relative_slice = (@path.to_s.size + 1)..-1
       @contains_bundle_path = BUNDLE_PATH.start_with?(@path.to_s)
     end
