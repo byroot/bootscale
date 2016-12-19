@@ -31,6 +31,7 @@ module Bootscale
 
       def setup(options = {})
         @cache_directory = options.fetch(:cache_directory, Bootscale.cache_directory)
+        require 'active_support'
         require 'active_support/dependencies'
         @cache = Cache.new(cache_directory)
         require_relative 'active_support/core_ext'
