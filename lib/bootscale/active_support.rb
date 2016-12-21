@@ -1,6 +1,23 @@
 module Bootscale
   module ActiveSupport
-    class Cache < ::Bootscale::Cache
+    class << self
+      attr_reader :cache, :cache_directory
+
+      def cache_builder
+        @cache_builder ||= CacheBuilder.new
+      end
+
+      def setup(options = {})
+        @cache_directory = options.fetch(:cache_directory, Bootscale.cache_directory)
+        require 'active_support'
+        require 'active_support/dependencies'
+        cache_implementation = options.fetch(:development_mode, false) ? DevelopmentCache : Cache
+        @cache = cache_implementation.new(cache_directory)
+        require_relative 'active_support/core_ext'
+      end
+    end
+
+    module CacheConcern
       def load_path
         ::ActiveSupport::Dependencies.autoload_paths
       end
@@ -22,20 +39,12 @@ module Bootscale
       end
     end
 
-    class << self
-      attr_reader :cache, :cache_directory
+    class Cache < ::Bootscale::Cache
+      include CacheConcern
+    end
 
-      def cache_builder
-        @cache_builder ||= CacheBuilder.new
-      end
-
-      def setup(options = {})
-        @cache_directory = options.fetch(:cache_directory, Bootscale.cache_directory)
-        require 'active_support'
-        require 'active_support/dependencies'
-        @cache = Cache.new(cache_directory)
-        require_relative 'active_support/core_ext'
-      end
+    class DevelopmentCache < ::Bootscale::DevelopmentCache
+      include CacheConcern
     end
   end
 end

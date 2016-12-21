@@ -30,8 +30,12 @@ module Bootscale
 
     attr_reader :storage
 
+    def regenerate(rescan = false)
+      @cache = save(Bootscale.cache_builder.generate(load_path, rescan))
+    end
+
     def fetch(load_path)
-      load || save(Bootscale.cache_builder.generate(load_path))
+      load || regenerate
     end
 
     def load
@@ -43,6 +47,18 @@ module Bootscale
       return cache unless storage
       storage.dump(load_path, cache)
       cache
+    end
+  end
+
+  class DevelopmentCache < Cache
+    def [](path)
+      absolute_path = super
+      if absolute_path && !::File.exist?(absolute_path)
+        Bootscale.logger.info { "[Bootscale] #{absolute_path} is missing, regenerating cache" }
+        regenerate(true)
+        return super
+      end
+      absolute_path
     end
   end
 end
