@@ -14,6 +14,7 @@ but for bigger applications it can save 1 to 3 seconds of boot time per 100 used
 # Gemfile
 gem 'bootscale', require: false
 ```
+
 ### Important
 
 For correctness cache should be updated everytime `$LOAD_PATH` is modified by calling `Bootscale.regenerate`.
@@ -28,10 +29,12 @@ module MyApp
     end
   end
 end
+```
 
 ### Rails applications
 
 Locate `require 'bundler/setup'` in `config/boot.rb` and add `require 'bootscale/rails'` after it:
+
 ```ruby
 require 'bundler/setup'
 require 'bootscale/rails'
