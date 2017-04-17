@@ -16,4 +16,14 @@ RSpec.describe Bootscale::CacheBuilder do
     cache = subject.generate(['spec/dummy/app/controllers'])
     expect(cache).to eq "application_controller.rb" => false
   end
+
+  it "resolved symlinked paths" do
+    in_tmpdir do
+      FileUtils.mkdir("real")
+      FileUtils.ln_s("real", "fake")
+      File.write("real/file.rb", "RELA")
+      cache = subject.generate([File.expand_path("fake")])
+      expect(cache).to eq "file.rb" => File.expand_path("real/file.rb")
+    end
+  end
 end

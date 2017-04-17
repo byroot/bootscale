@@ -14,11 +14,16 @@ module Bootscale
       @path = Pathname.new(path).cleanpath
       @absolute = @path.absolute?
       warn "Bootscale: Cannot speedup load for relative path #{@path}" unless @absolute
-      @relative_slice = (@path.to_s.size + 1)..-1
-      @contains_bundle_path = BUNDLE_PATH.start_with?(@path.to_s)
+
+      @path = (@path.exist? ? @path.realpath : nil)
+      if @path
+        @relative_slice = (@path.to_s.size + 1)..-1
+        @contains_bundle_path = BUNDLE_PATH.start_with?(@path.to_s)
+      end
     end
 
     def requireables
+      return [] unless @path
       Dir[File.join(@path, REQUIREABLE_FILES)].each_with_object([]) do |absolute_path, all|
         next if @contains_bundle_path && absolute_path.start_with?(BUNDLE_PATH)
         relative_path = absolute_path.slice(@relative_slice)
